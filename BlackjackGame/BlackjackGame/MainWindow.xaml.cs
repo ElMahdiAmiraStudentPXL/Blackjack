@@ -133,9 +133,6 @@ namespace BlackjackGame
                 kaartEnScoreSpeler = BtnDeelUitgeven(0);
                 TxtKaartSpeler.Text += kaartEnScoreSpeler[0] + " " + kaartEnScoreSpeler[1] + "\n";
                 ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, 0);
-                kaartEnScoreBank = BtnDeelUitgeven(1);
-                TxtKaartBank.Text += kaartEnScoreBank[0] + " " + kaartEnScoreBank[1] + "\n";
-                ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, 1);
                 BtnHit.IsEnabled = false;
                 BtnStand.IsEnabled = true;
 
@@ -165,7 +162,7 @@ namespace BlackjackGame
                 TxtStatus.Text = "Gewonnen";
                 TxtStatus.Foreground = Brushes.Green;
             }
-            else if (scoreSpeler > 21)
+            else if (scoreSpeler < 21 && scoreSpeler > scoreBank)
             {
                 TxtStatus.Text = "Gewonnen";
                 TxtStatus.Foreground = Brushes.Red;
@@ -176,12 +173,17 @@ namespace BlackjackGame
                 TxtStatus.Text = "Gelijkspel";
                 TxtStatus.Foreground = Brushes.Orange;
             }
-            else if (scoreSpeler < scoreBank && scoreBank < 21 && scoreSpeler < 21)
+            else if (scoreBank == 21 && scoreSpeler < 21)
             {
                 TxtStatus.Text = "Verloren";
                 TxtStatus.Foreground = Brushes.Red;
             }
-            BtnStand.IsEnabled = false;
+            else if (scoreBank > scoreSpeler && scoreBank <= 21)
+            {
+                TxtStatus.Text = "Verloren";
+                TxtStatus.Foreground = Brushes.Red;
+            }
+                BtnStand.IsEnabled = false;
 
         }
     }
