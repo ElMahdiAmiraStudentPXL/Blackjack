@@ -51,7 +51,7 @@
             Grid.ColumnSpan="2"
             Height="70"
             Width="200">
-        Deel</Button>
+            Deel</Button>
         <Button
             Name="BtnHit"
             Click="BtnHit_Click"
