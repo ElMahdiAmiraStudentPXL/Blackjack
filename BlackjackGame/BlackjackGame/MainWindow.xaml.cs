@@ -248,5 +248,16 @@ namespace BlackjackGame
 
         }
 
+        private void BtnNieuwSpel_Click(object sender, RoutedEventArgs e)
+        {
+            scoreSpeler = 0;
+            scoreBank = 0;
+            TxtKaartBank.Clear();
+            TxtKaartSpeler.Clear();
+            TxtStatus.Text = String.Empty;
+            TxtScoreSpeler.Text = "0";
+            TxtScoreBank.Text = "0";
+            BtnDeel.IsEnabled = true;
+        }
     }
 }

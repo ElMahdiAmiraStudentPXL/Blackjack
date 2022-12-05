@@ -44,9 +44,17 @@
             FontSize="50">TextBlock
         </TextBlock>
         <Button
+            Name="BtnNieuwSpel"
+            Click="BtnNieuwSpel_Click"
+            Grid.Row="0"
+            Grid.Column="2"
+            Grid.ColumnSpan="2"
+            Height="70"
+            Width="200">Nieuw spel</Button>
+        <Button
             Name="BtnDeel"
             Click="BtnDeel_Click"
-            Grid.Row="0"
+            Grid.Row="1"
             Grid.Column="2"
             Grid.ColumnSpan="2"
             Height="70"
@@ -55,7 +63,7 @@
         <Button
             Name="BtnHit"
             Click="BtnHit_Click"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="2"
             Grid.ColumnSpan="2"
             Height="70"
@@ -64,7 +72,7 @@
         <Button
             Name="BtnStand"
             Click="BtnStand_Click"
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="2"
             Grid.ColumnSpan="2"
             Height="70"
