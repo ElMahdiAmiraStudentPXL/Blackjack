@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BlackjackGame"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="700" Width="800"
+        MinWidth="700">
     <Grid Background="DodgerBlue">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -20,7 +21,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -29,54 +30,79 @@
             Grid.RowSpan="2"
             FontSize="50"
             Margin="10">Speler</TextBlock>
-        <TextBox
-            Name="TxtKaartSpeler"
+        <Viewbox
             Grid.Row="1"
             Grid.Column="0"
-            Grid.RowSpan="2"
             Grid.ColumnSpan="2"
-            Width="250"></TextBox>
+            Margin="5,0,0,0">
+            <TextBox
+            Name="TxtKaartSpeler"
+            IsReadOnly="True"
+            FontSize="20"
+            Width="450"
+            Height="150"></TextBox>
+        </Viewbox>
+        <Slider 
+            Name="SliderAmount"
+            MaxWidth="225"
+            Margin="20"
+            Grid.ColumnSpan="2"
+            Maximum="100"
+            Grid.Row="3" ValueChanged="Slider_ValueChanged"></Slider>
         <TextBlock
             Name="TxtScoreSpeler"
             Grid.Row="4"
             Grid.Column="0"
             Margin="10"
-            FontSize="50">TextBlock
+            FontSize="50"
+            HorizontalAlignment="Center">TextBlock
         </TextBlock>
-        <Button
-            Name="BtnNieuwSpel"
-            Click="BtnNieuwSpel_Click"
+
+        <Viewbox 
             Grid.Row="0"
             Grid.Column="2"
             Grid.ColumnSpan="2"
-            Height="70"
-            Width="200">Nieuw spel</Button>
-        <Button
-            Name="BtnDeel"
-            Click="BtnDeel_Click"
+            Margin="15"
+            >
+            <Button
+            Name="BtnNieuwSpel"
+            Click="BtnNieuwSpel_Click"
+            Width="150"
+            >Nieuw spel</Button>
+        </Viewbox>
+        <Viewbox
             Grid.Row="1"
             Grid.Column="2"
             Grid.ColumnSpan="2"
-            Height="70"
-            Width="200">
-            Deel</Button>
-        <Button
-            Name="BtnHit"
-            Click="BtnHit_Click"
+            Margin="15">
+
+            <Button
+            Name="BtnDeel"
+            Click="BtnDeel_Click"
+                Width="150">
+                Deel</Button>
+        </Viewbox>
+        <Viewbox
             Grid.Row="2"
             Grid.Column="2"
             Grid.ColumnSpan="2"
-            Height="70"
-            Width="200">
-            Hit</Button>
-        <Button
-            Name="BtnStand"
-            Click="BtnStand_Click"
+            Margin="15">
+            <Button
+            Name="BtnHit"
+            Click="BtnHit_Click"
+            Width="150">
+                Hit</Button>
+        </Viewbox>
+        <Viewbox
             Grid.Row="3"
             Grid.Column="2"
             Grid.ColumnSpan="2"
-            Height="70"
-            Width="200">Stand</Button>
+            Margin="15">
+            <Button
+            Name="BtnStand"
+            Click="BtnStand_Click"
+            Width="150">Stand</Button>
+        </Viewbox>
         <TextBlock
             Grid.Row="0"
             Grid.Column="4"
@@ -85,19 +111,55 @@
             FontSize="50"
             Margin="10">
             Bank</TextBlock>
-        <TextBox
-            Name="TxtKaartBank"
+        <Viewbox
             Grid.Row="1"
             Grid.Column="4"
-            Grid.RowSpan="2"
             Grid.ColumnSpan="2"
-            Width="250"></TextBox>
+            Margin="0,0,5,0">
+            <TextBox
+            Name="TxtKaartBank"
+            IsReadOnly="True"
+            Width="450"
+            Height="150"
+            FontSize="20"></TextBox>
+        </Viewbox>
+        <Label
+            Grid.Row="2"
+            FontSize="15"
+            HorizontalAlignment="Center"
+            Margin="0,10,0,0"
+            >Inzet:</Label>
+        <Viewbox
+            Grid.Row="2"
+            Margin="5,0,0,0">
+            <TextBox
+            Name="TxtInzet"
+            Width="120"
+            Height="30"></TextBox>
+        </Viewbox>
+        <Label
+            Grid.Row="2"
+            Grid.Column="1"
+            FontSize="15"
+            HorizontalAlignment="Center"
+            Margin="0,10,0,0">Kapitaal:</Label>
+        <Viewbox
+        Grid.Row="2"
+        Grid.Column="1"
+        Margin="5,0,0,0">
+            <TextBox
+            Name="TxtKapitaal"
+            IsReadOnly="True"
+            Width="120"
+            Height="30"></TextBox>
+        </Viewbox>
         <TextBlock
             Name="TxtScoreBank"
             Grid.Row="4"
-            Grid.Column="4"
+            Grid.Column="5"
             Margin="10"
-            FontSize="50">TextBlock
+            FontSize="50"
+            HorizontalAlignment="Center">TextBlock
         </TextBlock>
         <TextBlock
             Name="TxtStatus"
@@ -105,7 +167,42 @@
             Grid.Column="2"
             Grid.ColumnSpan="2"
             Margin="10"
-            FontSize="40">TextBlock
+            FontSize="40"
+            HorizontalAlignment="Center">TextBlock
         </TextBlock>
+        <Image Name="ImageKaartSpeler"
+               Source="/Kaarten/LegeKaart/EmptyCard.svg.png"
+               Grid.Row="4"
+               Grid.Column="1"
+                              Margin="0,0,0,30"
+               />
+        <Image Name="ImageKaartBank"
+               Source="/Kaarten/LegeKaart/EmptyCard.svg.png"
+               Grid.Row="4"
+               Grid.Column="4"
+               Margin="0,0,0,30"
+               />
+        <!--<Viewbox
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="15">
+            <Button
+            Name="BtnDoubleDown"
+            Click="BtnDoubleDown_Click"
+            Width="150">Double down</Button>
+        </Viewbox>-->
+        <DockPanel
+            Grid.Row="4"
+            Grid.ColumnSpan="6"
+            VerticalAlignment="Bottom"
+            Height="25">
+            <StatusBar DockPanel.Dock="Bottom">
+                <StatusBarItem>
+                    <TextBlock Name="TxtKlok"></TextBlock>
+                </StatusBarItem>
+            </StatusBar>
+        </DockPanel>
     </Grid>
+    
 </Window>
