@@ -654,6 +654,7 @@ namespace BlackjackGame
         {
             BtnStand.IsEnabled = false;
             BtnHit.IsEnabled = false;
+            BtnDoubleDown.IsEnabled = false;
             int dubbelInzet = Convert.ToInt32(TxtInzet.Text) * 2;
             TxtInzet.Text = Convert.ToString(dubbelInzet);
             if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) > 0)
