@@ -43,9 +43,6 @@ namespace BlackjackGame
         private List<string> imageKaarten;
         private double inzet;
         private BitmapImage imageKaart = new BitmapImage();
-        private DispatcherTimer klok = new DispatcherTimer();
-        private string Historiek;
-        private int RondeCounter;
 
         /// <summary>
         /// Hier worden het nodig Tick event aangemaakt voor de klok en de buttons die nu niet nodig
@@ -55,15 +52,11 @@ namespace BlackjackGame
         public MainWindow()
         {
             InitializeComponent();
-            klok.Interval = new TimeSpan(1000);
-            klok.Tick += Klok_Tick;
-            klok.Start();
             TxtScoreBank.Text = "0";
             TxtScoreSpeler.Text = "0";
             TxtStatus.Text = String.Empty;
             BtnHit.IsEnabled = false;
             BtnStand.IsEnabled = false;
-            BtnDoubleDown.IsEnabled = false;
             imageKaarten = new List<string>
             {
                 "/Kaarten/Harten/2H.svg.png", "/Kaarten/Harten/3H.svg.png",
@@ -113,11 +106,6 @@ namespace BlackjackGame
                 {"Ruiten 2", 2}, {"Ruiten 3", 3}, {"Ruiten 4", 4}, {"Ruiten 5", 5}, {"Ruiten 6", 6}, {"Ruiten 7", 7}, {"Ruiten 8", 8}, {"Ruiten 9", 9},
                 {"Ruiten 10", 10 }, {"Ruiten Vrouw", 10}, {"Ruiten Heer", 10}, {"Ruiten Boer", 10}, {"Ruiten Aas", 11}
             };
-        }
-        // Tick event voor klok op statusbalk
-        private void Klok_Tick(object sender, EventArgs e)
-        {
-            TxtKlok.Text = DateTime.Now.ToLongTimeString();
         }
 
         /// <summary>
@@ -209,6 +197,7 @@ namespace BlackjackGame
             BtnDeel.IsEnabled = false;
             TxtInzet.IsReadOnly = true;
             BtnNieuwSpel.IsEnabled = false;
+            SliderAmount.IsEnabled = false;
             if (TxtKapitaal.Text != "")
             {
                 if (MinInzetIs10PcOfKapitaalOp() == true)
@@ -233,7 +222,6 @@ namespace BlackjackGame
                         PrintKaart(false);
                     }
                     BtnStand.IsEnabled = true;
-                    BtnDoubleDown.IsEnabled = true;
                     if (scoreSpelerBerekend < 21)
                     {
                         BtnHit.IsEnabled = true;
@@ -410,17 +398,14 @@ namespace BlackjackGame
         private async void BtnHit_Click(object sender, RoutedEventArgs e)
         {
             GeefKaart(true);
-            if (kaartEnScoreSpeler != null)
+            ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
+            if (scoreSpelerBerekend >= 21)
             {
-                await Task.Delay(1000);
-                PrintKaart(true);
-                ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
-                if (scoreSpelerBerekend >= 21)
-                {
-                    BtnHit.IsEnabled = false;
-                    BtnDoubleDown.IsEnabled = false;
-                }
+                BtnHit.IsEnabled = false;
             }
+            await Task.Delay(1000);
+            PrintKaart(true);
+
         }
         /// <summary>
         /// Functie die kapitaal toevoegt aan de speler, als de speler pusht, dan krijgt
@@ -442,36 +427,6 @@ namespace BlackjackGame
                 TxtKapitaal.Text = Convert.ToString(som);
             }
             
-        }
-
-
-        /// <summary>
-        /// Hier wordt de historiek toegevoegd aan private string Historiek en de laatste hand
-        /// wordt toegevoegd aan LaatsteHand.Text, er is rondeCounter die aangeeft welke ronde het is
-        /// </summary>
-        private void HistoriekBijhouden()
-        {
-            BtnDeel.IsEnabled = true;
-            TxtInzet.IsReadOnly = false;
-            BtnDoubleDown.IsEnabled = false;
-            if (TxtStatus.Text == "Gewonnen")
-            {
-                TxtLaatsteHand.Text = "Bedrag: +" + TxtInzet.Text + " punten Speler: " + TxtScoreSpeler.Text + " Punten Bank: " + TxtScoreBank.Text;
-                RondeCounter++;
-                Historiek += "Ronde " + RondeCounter + ": " + TxtLaatsteHand.Text + "\n";
-            }
-            else if (TxtStatus.Text != "Push")
-            {
-                TxtLaatsteHand.Text = "Bedrag: -" + TxtInzet.Text + " punten Speler: " + TxtScoreSpeler.Text + " Punten Bank: " + TxtScoreBank.Text;
-                RondeCounter++;
-                Historiek += "Ronde " + RondeCounter + ": " + TxtLaatsteHand.Text + "\n";
-            }
-            else
-            {
-                TxtLaatsteHand.Text = "Bedrag: " + TxtInzet.Text + " punten Speler: " + TxtScoreSpeler.Text + " Punten Bank: " + TxtScoreBank.Text;
-                RondeCounter++;
-                Historiek += "Ronde " + RondeCounter + ": " + TxtLaatsteHand.Text + "\n";
-            }
         }
         /// <summary>
         /// Hier wordt gekeken of de Speler gewonnen, push of verloren heeft
@@ -540,7 +495,7 @@ namespace BlackjackGame
                 TxtStatus.Foreground = Brushes.Green;
                 VoegKapitaalToe();
             }
-            HistoriekBijhouden();
+            BtnDeel.IsEnabled = true;
         }
 
         /// <summary>
@@ -575,9 +530,6 @@ namespace BlackjackGame
             ImageKaartBank.Source = imageKaart;
             TxtInzet.IsReadOnly = false;
             TxtKapitaal.Text = "100";
-            Historiek = "";
-            RondeCounter = 0;
-            TxtLaatsteHand.Text = "Laatste hand";
             soortKaarten = new Dictionary<string, int>
                            {
                                 { "Harten 2", 2}, {"Harten 3", 3}, {"Harten 4", 4 }, {"Harten 5", 5}, {"Harten 6", 6}, {"Harten 7", 7}, {"Harten 8", 8},
@@ -631,54 +583,6 @@ namespace BlackjackGame
         {
 
             TxtInzet.Text = Convert.ToString(Convert.ToInt32(SliderAmount.Value));
-        }
-
-        /// <summary>
-        /// De inzet wordt verdubbeld en de GeefKaart, ScoreGeven, BtnStand_Click functies worden aangeroepen
-        /// om een kaart te geven en aan te geven of de speler gewonnen of verloren heeft tegen de bank.
-        /// Er wordt ook aangegeven als deze actie niet mogelijk is.
-        /// </summary>
-        private async void BtnDoubleDown_Click(object sender, RoutedEventArgs e)
-        {
-            BtnStand.IsEnabled = false;
-            BtnHit.IsEnabled = false;
-            int dubbelInzet = Convert.ToInt32(TxtInzet.Text) * 2;
-            TxtInzet.Text = Convert.ToString(dubbelInzet);
-            if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) > 0)
-            {
-                GeefKaart(true);
-                if (kaartEnScoreSpeler != null)
-                {
-                    TxtKapitaal.Text = Convert.ToString(Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) / 2));
-                    await Task.Delay(1000);
-                    PrintKaart(true);
-                    ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
-                    BtnStand_Click(sender, e);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Deze actie is niet mogelijk want uw kapitaal is te laag.",
-                    "Te lage kapitaal", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-        }
-
-
-        /// <summary>
-        /// Wanneer er op de Historiek label geklikt wordt, zal de Historiek getoond worden,
-        /// als de Historiek leeg is zal dat ook getoond worden.
-        /// </summary>
-        private void LblHistoriek_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Historiek == "")
-            {
-                MessageBox.Show("Historiek is leeg", "Lege historiek", MessageBoxButton.OK);
-            }
-            else
-            {
-                MessageBox.Show(Historiek, "Historiek", MessageBoxButton.OK);
-            }
         }
     }
 }

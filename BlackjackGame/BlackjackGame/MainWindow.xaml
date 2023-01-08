@@ -173,56 +173,12 @@
                Source="/Kaarten/LegeKaart/EmptyCard.svg.png"
                Grid.Row="4"
                Grid.Column="1"
-                              Margin="0,0,0,30"
                />
         <Image Name="ImageKaartBank"
                Source="/Kaarten/LegeKaart/EmptyCard.svg.png"
                Grid.Row="4"
                Grid.Column="4"
-               Margin="0,0,0,30"
                />
-        <Viewbox
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="15">
-            <Button
-            Name="BtnDoubleDown"
-            Click="BtnDoubleDown_Click"
-            Width="150">Double down</Button>
-        </Viewbox>
-        <DockPanel
-            Grid.Row="4"
-            Grid.ColumnSpan="6"
-            VerticalAlignment="Bottom"
-            Height="30">
-            <StatusBar DockPanel.Dock="Bottom">
-                <StatusBar.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                        </Grid>
-                    </ItemsPanelTemplate>
-                </StatusBar.ItemsPanel>
-                <StatusBarItem>
-                    <TextBlock Name="TxtKlok">uu:mm:ss</TextBlock>
-                </StatusBarItem>
-                <StatusBarItem Grid.Column="1"
-                               HorizontalAlignment="Center">
-                    <Label Name="LblHistoriek" Content="Historiek"
-                           MouseLeftButtonDown="LblHistoriek_MouseLeftButtonDown">
-                    </Label>
-                </StatusBarItem>
-                <StatusBarItem Grid.Column="2"
-                               HorizontalAlignment="Right">
-                    <TextBlock Name="TxtLaatsteHand">Laatste hand</TextBlock>
-                </StatusBarItem>
-            </StatusBar>
-        </DockPanel>
     </Grid>
     
 </Window>
