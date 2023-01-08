@@ -46,3 +46,7 @@ C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\obj\Debug\Blackja
 C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\obj\Debug\BlackjackGame.csproj.CoreCompileInputs.cache
 C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\obj\Debug\BlackjackGame.exe
 C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\obj\Debug\BlackjackGame.pdb
+C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\bin\Debug\BlackjackGame.exe.manifest
+C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\bin\Debug\BlackjackGame.application
+C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\obj\Debug\BlackjackGame.exe.manifest
+C:\Users\mahdi\Documents\Blackjack\BlackjackGame\BlackjackGame\obj\Debug\BlackjackGame.application

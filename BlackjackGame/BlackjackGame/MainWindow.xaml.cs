@@ -21,7 +21,9 @@ using System.Xml.Linq;
 namespace BlackjackGame
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Alle nodige waarden worden aangemaakt, er bestaat een scoreSpelerOnberekend en een scoreBankOnberekend die
+    /// geen rekening houden met de aas waarde. De reden hiervoor is om daarna de aantal azen af te trekken maal 10
+    /// en die waarde door te geven aan de berekende waarden.
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -42,9 +44,13 @@ namespace BlackjackGame
         private double inzet;
         private BitmapImage imageKaart = new BitmapImage();
         private DispatcherTimer klok = new DispatcherTimer();
+        private string Historiek;
+        private int RondeCounter;
 
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hier worden het nodig Tick event aangemaakt voor de klok en de buttons die nu niet nodig
+        /// zijn worden uitgeschakeld. Er worden ook de List aangemaakt van de afbeeldingen en
+        /// een dictionary van de kaarten en hun waarden.
         /// </summary>
         public MainWindow()
         {
@@ -57,7 +63,7 @@ namespace BlackjackGame
             TxtStatus.Text = String.Empty;
             BtnHit.IsEnabled = false;
             BtnStand.IsEnabled = false;
-            //BtnDoubleDown.IsEnabled = false;
+            BtnDoubleDown.IsEnabled = false;
             imageKaarten = new List<string>
             {
                 "/Kaarten/Harten/2H.svg.png", "/Kaarten/Harten/3H.svg.png",
@@ -114,6 +120,10 @@ namespace BlackjackGame
             TxtKlok.Text = DateTime.Now.ToLongTimeString();
         }
 
+        /// <summary>
+        /// Hier wordt de kaart die gegeven werd afgeprint op de TextBox
+        /// en een Image wordt getoond van de kaart.
+        /// </summary>
         private void PrintKaart(bool isSpeler)
         {
             if (isSpeler == true)
@@ -139,11 +149,12 @@ namespace BlackjackGame
         }
 
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hier wordt gecontroleerd of de inzet 10% is van de kapitaal
+        /// en/of de kapitaal niet onder 0 zal gaan bij een gegeven inzet.
         /// </summary>
         private bool MinInzetIs10PcOfKapitaalOp()
         {
-            if (double.TryParse(TxtInzet.Text, out inzet) == true)
+            if (double.TryParse(TxtInzet.Text, out inzet) == true && inzet != 0)
             {
                 if (Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) >= Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text) * 0.1))
                 {
@@ -164,17 +175,23 @@ namespace BlackjackGame
                 else
                 {
                     MessageBox.Show("Inzet moet minstens 10% van de kapitaal zijn.", "Te lage inzet", MessageBoxButton.OK, MessageBoxImage.Error);
+                    BtnDeel.IsEnabled = true;
+                    TxtInzet.IsReadOnly = false;
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show("Inzet is geen numerieke waarde.", "Inzet fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Inzet is geen numerieke waarde of 0.", "Inzet fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                BtnDeel.IsEnabled= true;
+                TxtInzet.IsReadOnly = false;
                 return false;
             }
         }
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hier zal twee kaarten gegeven worden voor de speler en een voor de bank.
+        /// De waarden die terug op nul gezet moeten worden gebeurt hier ook.
+        /// De nodige knoppen worden enabled en de andere disabled.
         /// </summary>
         private async void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
@@ -189,6 +206,9 @@ namespace BlackjackGame
             TxtScoreSpeler.Text = "0";
             TxtScoreBank.Text = "0";
             TxtStatus.Text = "";
+            BtnDeel.IsEnabled = false;
+            TxtInzet.IsReadOnly = true;
+            BtnNieuwSpel.IsEnabled = false;
             if (TxtKapitaal.Text != "")
             {
                 if (MinInzetIs10PcOfKapitaalOp() == true)
@@ -212,12 +232,8 @@ namespace BlackjackGame
                         ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, false);
                         PrintKaart(false);
                     }
-
-                    BtnDeel.IsEnabled = false;
                     BtnStand.IsEnabled = true;
-                    TxtInzet.IsReadOnly = true;
-                    BtnNieuwSpel.IsEnabled = false;
-                    //BtnDoubleDown.IsEnabled = true;
+                    BtnDoubleDown.IsEnabled = true;
                     if (scoreSpelerBerekend < 21)
                     {
                         BtnHit.IsEnabled = true;
@@ -227,10 +243,13 @@ namespace BlackjackGame
             else
             {
                 MessageBox.Show("Druk eerst op de knop 'Nieuw Spel' om het spel te spelen.", "Nieuw Spel", MessageBoxButton.OK, MessageBoxImage.Error);
+                BtnNieuwSpel.IsEnabled = true;
             }
         }
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hier wordt een kaart gegeven aan de Speler of de Bank aan de hand
+        /// de bool isSpeler en als de kaarten opgebruikt zijn, worden de List en Dictionary
+        /// geladen met de nodige waarden
         /// </summary>
         private void GeefKaart(bool isSpeler)
         {
@@ -310,12 +329,11 @@ namespace BlackjackGame
         }
 
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hier wordt de score berekent, er wordt rekening gehouden met azen. Aan de hand van de hoeveelheid azen
+        /// zal de juiste berekening uitgevoerd worden om de juiste score af te beelden.
         /// </summary>
         private void ScoreGeven(string[] kaartEnScoreSpeler, string[] kaartEnScoreBank, bool isSpeler)
         {
-            if (kaartEnScoreSpeler != null)
-            {
                 if (isSpeler == true)
                 {
                     if (kaartEnScoreSpeler[1] != "11")
@@ -349,7 +367,7 @@ namespace BlackjackGame
                         }
                     }
                 }
-                else if (kaartEnScoreBank != null)
+                else
                 {
                     if (kaartEnScoreBank[1] != "11")
                     {
@@ -384,49 +402,87 @@ namespace BlackjackGame
                     }
 
                 }
-            }
-            else
-            {
-                MessageBox.Show("The one who made this mess made an oopsie", "OH NO", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-
         }
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hij wordt gebruikt gemaakt van de code die kaart geeft, de kaart toont en een score geeft
+        /// om een kaart aan de speler te geven, als de speler bust, dan wordt de knop disabled
         /// </summary>
         private async void BtnHit_Click(object sender, RoutedEventArgs e)
         {
+            GeefKaart(true);
+            if (kaartEnScoreSpeler != null)
             {
-                GeefKaart(true);
-                if (kaartEnScoreSpeler != null)
+                await Task.Delay(1000);
+                PrintKaart(true);
+                ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
+                if (scoreSpelerBerekend >= 21)
                 {
-                    await Task.Delay(1000);
-                    PrintKaart(true);
-                    ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
-                    if (scoreSpelerBerekend >= 21)
-                    {
-                        BtnHit.IsEnabled = false;
-                    }
+                    BtnHit.IsEnabled = false;
+                    BtnDoubleDown.IsEnabled = false;
                 }
             }
         }
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Functie die kapitaal toevoegt aan de speler, als de speler pusht, dan krijgt
+        /// hij de inzet gewoon terug. Als hij wint, dan krijgt hij het dubbele inzet
+        /// terug.
         /// </summary>
         private void VoegKapitaalToe()
         {
-            int som = 0;
-            som = Convert.ToInt32(TxtKapitaal.Text) + Convert.ToInt32(TxtInzet.Text) * 2;
-            TxtKapitaal.Text = Convert.ToString(som);
+            if(!(scoreBankBerekend == scoreSpelerBerekend))
+            {
+                int som = 0;
+                som = Convert.ToInt32(TxtKapitaal.Text) + Convert.ToInt32(TxtInzet.Text) * 2;
+                TxtKapitaal.Text = Convert.ToString(som);
+            }
+            else
+            {
+                int som = 0;
+                som = Convert.ToInt32(TxtKapitaal.Text) + Convert.ToInt32(TxtInzet.Text);
+                TxtKapitaal.Text = Convert.ToString(som);
+            }
+            
+        }
+
+
+        /// <summary>
+        /// Hier wordt de historiek toegevoegd aan private string Historiek en de laatste hand
+        /// wordt toegevoegd aan LaatsteHand.Text, er is rondeCounter die aangeeft welke ronde het is
+        /// </summary>
+        private void HistoriekBijhouden()
+        {
+            BtnDeel.IsEnabled = true;
+            TxtInzet.IsReadOnly = false;
+            BtnDoubleDown.IsEnabled = false;
+            if (TxtStatus.Text == "Gewonnen")
+            {
+                TxtLaatsteHand.Text = "Bedrag: +" + TxtInzet.Text + " punten Speler: " + TxtScoreSpeler.Text + " Punten Bank: " + TxtScoreBank.Text;
+                RondeCounter++;
+                Historiek += "Ronde " + RondeCounter + ": " + TxtLaatsteHand.Text + "\n";
+            }
+            else if (TxtStatus.Text != "Push")
+            {
+                TxtLaatsteHand.Text = "Bedrag: -" + TxtInzet.Text + " punten Speler: " + TxtScoreSpeler.Text + " Punten Bank: " + TxtScoreBank.Text;
+                RondeCounter++;
+                Historiek += "Ronde " + RondeCounter + ": " + TxtLaatsteHand.Text + "\n";
+            }
+            else
+            {
+                TxtLaatsteHand.Text = "Bedrag: " + TxtInzet.Text + " punten Speler: " + TxtScoreSpeler.Text + " Punten Bank: " + TxtScoreBank.Text;
+                RondeCounter++;
+                Historiek += "Ronde " + RondeCounter + ": " + TxtLaatsteHand.Text + "\n";
+            }
         }
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hier wordt gekeken of de Speler gewonnen, push of verloren heeft
+        /// aan de hand van de score die de Speler heeft behaald. Er wordt hier ook kaarten
+        /// uitgedeeld aan de bank tot het een score heeft hoger dan 16.
         /// </summary>
         private async void BtnStand_Click(object sender, RoutedEventArgs e)
         {
             BtnHit.IsEnabled = false;
-            while (scoreBankBerekend < 16)
+            BtnStand.IsEnabled = false;
+            while (!(scoreBankBerekend > 16))
             {
                 GeefKaart(false);
                 if (kaartEnScoreBank != null)
@@ -466,6 +522,7 @@ namespace BlackjackGame
             {
                 TxtStatus.Text = "Push";
                 TxtStatus.Foreground = Brushes.Black;
+                VoegKapitaalToe();
             }
             else if (scoreBankBerekend == 21 && scoreSpelerBerekend < 21)
             {
@@ -483,14 +540,14 @@ namespace BlackjackGame
                 TxtStatus.Foreground = Brushes.Green;
                 VoegKapitaalToe();
             }
-            BtnStand.IsEnabled = false;
-            BtnDeel.IsEnabled = true;
-            TxtInzet.IsReadOnly = false;
-
+            HistoriekBijhouden();
         }
 
         /// <summary>
-        /// Interaction logic for MainWindow.xaml
+        /// Hier wordt de nodige waarden terug op 0 gezet en kapitaal op 100 op het
+        /// spel weer te kunnen spelen, de nodige knoppen wordt geactiveerd en de andere
+        /// uitgeschakeld, de List van afbeeldingen en de Dictionary van kaarten en waarden
+        /// worden terug naar hun standaardwaarden gezet.
         /// </summary>
         private void BtnNieuwSpel_Click(object sender, RoutedEventArgs e)
         {
@@ -518,6 +575,9 @@ namespace BlackjackGame
             ImageKaartBank.Source = imageKaart;
             TxtInzet.IsReadOnly = false;
             TxtKapitaal.Text = "100";
+            Historiek = "";
+            RondeCounter = 0;
+            TxtLaatsteHand.Text = "Laatste hand";
             soortKaarten = new Dictionary<string, int>
                            {
                                 { "Harten 2", 2}, {"Harten 3", 3}, {"Harten 4", 4 }, {"Harten 5", 5}, {"Harten 6", 6}, {"Harten 7", 7}, {"Harten 8", 8},
@@ -573,10 +633,52 @@ namespace BlackjackGame
             TxtInzet.Text = Convert.ToString(Convert.ToInt32(SliderAmount.Value));
         }
 
-        //private void BtnDoubleDown_Click(object sender, RoutedEventArgs e)
-        //{
-        //    int dubbelInzet = Convert.ToInt32(TxtInzet.Text) * 2;
-        //    TxtInzet.Text = Convert.ToString(dubbelInzet);
-        //}
+        /// <summary>
+        /// De inzet wordt verdubbeld en de GeefKaart, ScoreGeven, BtnStand_Click functies worden aangeroepen
+        /// om een kaart te geven en aan te geven of de speler gewonnen of verloren heeft tegen de bank.
+        /// Er wordt ook aangegeven als deze actie niet mogelijk is.
+        /// </summary>
+        private async void BtnDoubleDown_Click(object sender, RoutedEventArgs e)
+        {
+            BtnStand.IsEnabled = false;
+            BtnHit.IsEnabled = false;
+            int dubbelInzet = Convert.ToInt32(TxtInzet.Text) * 2;
+            TxtInzet.Text = Convert.ToString(dubbelInzet);
+            if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) > 0)
+            {
+                GeefKaart(true);
+                if (kaartEnScoreSpeler != null)
+                {
+                    TxtKapitaal.Text = Convert.ToString(Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) / 2));
+                    await Task.Delay(1000);
+                    PrintKaart(true);
+                    ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
+                    BtnStand_Click(sender, e);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Deze actie is niet mogelijk want uw kapitaal is te laag.",
+                    "Te lage kapitaal", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+
+
+        /// <summary>
+        /// Wanneer er op de Historiek label geklikt wordt, zal de Historiek getoond worden,
+        /// als de Historiek leeg is zal dat ook getoond worden.
+        /// </summary>
+        private void LblHistoriek_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Historiek == "")
+            {
+                MessageBox.Show("Historiek is leeg", "Lege historiek", MessageBoxButton.OK);
+            }
+            else
+            {
+                MessageBox.Show(Historiek, "Historiek", MessageBoxButton.OK);
+            }
+        }
     }
 }
