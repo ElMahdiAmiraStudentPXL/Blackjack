@@ -126,7 +126,6 @@
             Grid.Row="2"
             FontSize="15"
             HorizontalAlignment="Center"
-            Margin="0,10,0,0"
             >Inzet:</Label>
         <Viewbox
             Grid.Row="2"
@@ -141,7 +140,7 @@
             Grid.Column="1"
             FontSize="15"
             HorizontalAlignment="Center"
-            Margin="0,10,0,0">Kapitaal:</Label>
+            >Kapitaal:</Label>
         <Viewbox
         Grid.Row="2"
         Grid.Column="1"

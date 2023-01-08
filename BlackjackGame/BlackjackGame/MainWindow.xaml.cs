@@ -205,6 +205,7 @@ namespace BlackjackGame
         /// </summary>
         private async void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
+            SliderAmount.IsEnabled = false;
             TxtKaartSpeler.Text = "";
             TxtKaartBank.Text = "";
             scoreSpelerBerekend = 0;
@@ -461,9 +462,6 @@ namespace BlackjackGame
         /// </summary>
         private void HistoriekBijhouden()
         {
-            BtnDeel.IsEnabled = true;
-            TxtInzet.IsReadOnly = false;
-            BtnDoubleDown.IsEnabled = false;
             if (TxtStatus.Text == "Gewonnen")
             {
                 TxtLaatsteHand.Text = "Bedrag: +" + TxtInzet.Text + " punten Speler: " + TxtScoreSpeler.Text + " Punten Bank: " + TxtScoreBank.Text;
@@ -550,6 +548,10 @@ namespace BlackjackGame
                 TxtStatus.Foreground = Brushes.Green;
                 VoegKapitaalToe();
             }
+            BtnDeel.IsEnabled = true;
+            TxtInzet.IsReadOnly = false;
+            SliderAmount.IsEnabled = false;
+            BtnDoubleDown.IsEnabled = false;
             HistoriekBijhouden();
         }
 
