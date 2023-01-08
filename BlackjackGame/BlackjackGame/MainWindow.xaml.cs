@@ -17,11 +17,10 @@ using System.Windows.Shapes;
 namespace BlackjackGame
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Nodige waarden worden aangemaakt
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int score;
         private int scoreSpeler;
         private int scoreBank;
         private int waardeKaart;
@@ -29,8 +28,6 @@ namespace BlackjackGame
         private Random randomNummer = new Random();
         private string[] kaartEnScoreSpeler;
         private string[] kaartEnScoreBank;
-        private int aasCounterSpeler;
-        private int aasCounterBank;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,6 +38,7 @@ namespace BlackjackGame
             BtnStand.IsEnabled = false;
         }
 
+        // De kaarten worden getoond van de Speler en Bank
         private void PrintKaart(int beurtNummer)
         {
             if (beurtNummer == 0)
@@ -79,14 +77,18 @@ namespace BlackjackGame
 
         private void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
+            scoreSpeler = 0;
+            scoreBank = 0;
+            TxtKaartBank.Text = "";
+            TxtKaartSpeler.Text = "";
             for (int i = 0; i < 2; i++)
             {
-                kaartEnScoreSpeler = BtnDeelUitgeven(0);
+                kaartEnScoreSpeler = GeefKaart(false);
                 ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, 0);
                 PrintKaart(0);
                 
             }
-            kaartEnScoreBank = BtnDeelUitgeven(1);
+            kaartEnScoreBank = GeefKaart(true);
             ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, 1);
             PrintKaart(1);
             BtnDeel.IsEnabled = false;
@@ -100,7 +102,7 @@ namespace BlackjackGame
 
         }
 
-        private string[] BtnDeelUitgeven(int beurtNummer)
+        private string[] GeefKaart(bool isSpeler)
         {
             string[] soortKaarten = { "Harten", "Schoppen", "Klaveren", "Schoppen",
                 "Harten Aas", "Schoppen Aas", "Klaveren Aas", "Schoppen Aas",
@@ -109,11 +111,11 @@ namespace BlackjackGame
                 "Harten Heer", "Schoppen Heer", "Klaveren Heer", "Schoppen Heer"};
             int nummerKaart = randomNummer.Next(0, 19);
             soortKaart = soortKaarten[nummerKaart];
-            if (soortKaarten[nummerKaart].Substring(soortKaarten[nummerKaart].Length - 3) == "Aas" && beurtNummer == 0)
+            if (soortKaarten[nummerKaart].Substring(soortKaarten[nummerKaart].Length - 3) == "Aas" && isSpeler == false)
             {
                     waardeKaart = 11;
             }
-            else if (soortKaarten[nummerKaart].Substring(soortKaarten[nummerKaart].Length - 3) == "Aas" && beurtNummer == 1)
+            else if (soortKaarten[nummerKaart].Substring(soortKaarten[nummerKaart].Length - 3) == "Aas" && isSpeler == true)
             {
                     waardeKaart = 11;
             }
@@ -129,7 +131,6 @@ namespace BlackjackGame
             {
                 waardeKaart = 10;
             }
-            score += waardeKaart;
             string[] kaartEnScore = { soortKaart, Convert.ToString(waardeKaart) };
             return kaartEnScore;
 
@@ -146,12 +147,7 @@ namespace BlackjackGame
                 }
                 else
                 {
-                    scoreSpeler += 11;
-                    TxtScoreSpeler.Text = Convert.ToString(scoreSpeler);
-                }
-                if (aasCounterSpeler < 1 && scoreSpeler > 21)
-                {
-                    scoreSpeler -= 10 * aasCounterSpeler;
+                    scoreSpeler += 1;
                     TxtScoreSpeler.Text = Convert.ToString(scoreSpeler);
                 }
             }
@@ -161,18 +157,12 @@ namespace BlackjackGame
                 {
                     scoreBank += Convert.ToInt32(kaartEnScoreBank[1]);
                     TxtScoreBank.Text = Convert.ToString(scoreBank);
-                    aasCounterBank += 1;
                 }
                 else
                 {
-                    scoreBank += 11;
+                    scoreBank += 1;
                     TxtScoreBank.Text = Convert.ToString(scoreBank);
 
-                }
-                if (aasCounterBank < 1 && scoreBank > 21)
-                {
-                    scoreBank -= 10 * aasCounterBank;
-                    TxtScoreBank.Text = Convert.ToString(scoreBank);
                 }
 
 
@@ -183,7 +173,7 @@ namespace BlackjackGame
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
         {
-            kaartEnScoreSpeler = BtnDeelUitgeven(0);
+            kaartEnScoreSpeler = GeefKaart(false);
             PrintKaart(0);
             ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, 0);
             if (scoreSpeler >= 21)
@@ -198,7 +188,7 @@ namespace BlackjackGame
             BtnHit.IsEnabled = false;
             while (scoreBank < 16)
             {
-                kaartEnScoreBank = BtnDeelUitgeven(1);
+                kaartEnScoreBank = GeefKaart(true);
                 PrintKaart(1);
                 ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, 1);
             }
@@ -245,6 +235,7 @@ namespace BlackjackGame
                 TxtStatus.Foreground = Brushes.Green;
             }
             BtnStand.IsEnabled = false;
+            BtnDeel.IsEnabled = true;
 
         }
 
