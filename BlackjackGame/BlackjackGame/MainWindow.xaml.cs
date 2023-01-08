@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -38,7 +39,7 @@ namespace BlackjackGame
             BtnStand.IsEnabled = false;
         }
 
-        // De kaarten worden getoond van de Speler en Bank
+        // De kaarten worden getoond van de Speler en Bank in de TextBoxen
         private void PrintKaart(int beurtNummer)
         {
             if (beurtNummer == 0)
@@ -75,12 +76,14 @@ namespace BlackjackGame
 
         }
 
+        // Hier worden de nodige methodes opgeroepen om kaart te geven en scores te berekenen
         private void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
             scoreSpeler = 0;
             scoreBank = 0;
             TxtKaartBank.Text = "";
             TxtKaartSpeler.Text = "";
+            TxtStatus.Text = "";
             for (int i = 0; i < 2; i++)
             {
                 kaartEnScoreSpeler = GeefKaart(false);
@@ -102,6 +105,9 @@ namespace BlackjackGame
 
         }
 
+        /// <summary>
+        /// Er wordt een kaart uitgedeeld aan de Speler of Bank aan de hand van de bool isSpeler
+        /// </summary>
         private string[] GeefKaart(bool isSpeler)
         {
             string[] soortKaarten = { "Harten", "Schoppen", "Klaveren", "Schoppen",
@@ -183,10 +189,12 @@ namespace BlackjackGame
 
         }
 
+        // Hier wordt de GeefKaart methode opgeroepen om bank kaarten te geven tot een score van meer dan 16,
+        // dan wordt er beslist wie er gewonnen heeft.
         private void BtnStand_Click(object sender, RoutedEventArgs e)
         {
             BtnHit.IsEnabled = false;
-            while (scoreBank < 16)
+            while (!(scoreBank > 16))
             {
                 kaartEnScoreBank = GeefKaart(true);
                 PrintKaart(1);
