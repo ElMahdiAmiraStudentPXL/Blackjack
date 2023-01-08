@@ -45,7 +45,6 @@
         <Slider 
             Name="SliderAmount"
             MaxWidth="225"
-            Margin="20"
             Grid.ColumnSpan="2"
             Maximum="100"
             Grid.Row="3" ValueChanged="Slider_ValueChanged"></Slider>
@@ -182,7 +181,7 @@
                Grid.Column="4"
                Margin="0,0,0,30"
                />
-        <!--<Viewbox
+        <Viewbox
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
@@ -191,15 +190,36 @@
             Name="BtnDoubleDown"
             Click="BtnDoubleDown_Click"
             Width="150">Double down</Button>
-        </Viewbox>-->
+        </Viewbox>
         <DockPanel
             Grid.Row="4"
             Grid.ColumnSpan="6"
             VerticalAlignment="Bottom"
-            Height="25">
+            Height="30">
             <StatusBar DockPanel.Dock="Bottom">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
                 <StatusBarItem>
-                    <TextBlock Name="TxtKlok"></TextBlock>
+                    <TextBlock Name="TxtKlok">uu:mm:ss</TextBlock>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="1"
+                               HorizontalAlignment="Center">
+                    <Label Name="LblHistoriek" Content="Historiek"
+                           MouseLeftButtonDown="LblHistoriek_MouseLeftButtonDown">
+                    </Label>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2"
+                               HorizontalAlignment="Right">
+                    <TextBlock Name="TxtLaatsteHand">Laatste hand</TextBlock>
                 </StatusBarItem>
             </StatusBar>
         </DockPanel>
