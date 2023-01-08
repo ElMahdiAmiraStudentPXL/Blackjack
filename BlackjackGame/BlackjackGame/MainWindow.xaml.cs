@@ -113,6 +113,7 @@ namespace BlackjackGame
                 {"Ruiten 2", 2}, {"Ruiten 3", 3}, {"Ruiten 4", 4}, {"Ruiten 5", 5}, {"Ruiten 6", 6}, {"Ruiten 7", 7}, {"Ruiten 8", 8}, {"Ruiten 9", 9},
                 {"Ruiten 10", 10 }, {"Ruiten Vrouw", 10}, {"Ruiten Heer", 10}, {"Ruiten Boer", 10}, {"Ruiten Aas", 11}
             };
+            TxtHoeveelheidKaarten.Content = Convert.ToString(soortKaarten.Count);
         }
         // Tick event voor klok op statusbalk
         private void Klok_Tick(object sender, EventArgs e)
@@ -281,6 +282,7 @@ namespace BlackjackGame
                     }
                     soortKaarten.Remove(soortKaarten.ElementAt(nummerKaart).Key);
                     imageKaarten.RemoveAt(nummerKaart);
+                    TxtHoeveelheidKaarten.Content = Convert.ToString(soortKaarten.Count);
                 }
                 else if (soortKaarten.Count == 0 && imageKaarten.Count == 0)
                 {
@@ -655,10 +657,10 @@ namespace BlackjackGame
             BtnStand.IsEnabled = false;
             BtnHit.IsEnabled = false;
             BtnDoubleDown.IsEnabled = false;
-            int dubbelInzet = Convert.ToInt32(TxtInzet.Text) * 2;
-            TxtInzet.Text = Convert.ToString(dubbelInzet);
-            if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) > 0)
+            if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text))*2 > 0)
             {
+                int dubbelInzet = Convert.ToInt32(TxtInzet.Text) * 2;
+                TxtInzet.Text = Convert.ToString(dubbelInzet);
                 GeefKaart(true);
                 if (kaartEnScoreSpeler != null)
                 {
@@ -673,6 +675,8 @@ namespace BlackjackGame
             {
                 MessageBox.Show("Deze actie is niet mogelijk want uw kapitaal is te laag.",
                     "Te lage kapitaal", MessageBoxButton.OK, MessageBoxImage.Error);
+                BtnStand.IsEnabled = true;
+                BtnHit.IsEnabled = true;
             }
 
         }

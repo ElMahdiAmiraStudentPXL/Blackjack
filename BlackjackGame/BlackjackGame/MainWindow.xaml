@@ -222,6 +222,24 @@
                 </StatusBarItem>
             </StatusBar>
         </DockPanel>
+        <Label
+            Grid.Row="2"
+            Grid.Column="4"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Hoeveelheid kaarten"
+            FontSize="15">
+            
+        </Label>
+        <Label 
+               Name="TxtHoeveelheidKaarten"
+               Grid.Row="2"
+               Grid.Column="4"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="50"
+               >Hoeveelheid</Label>
     </Grid>
     
 </Window>
