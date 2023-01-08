@@ -172,13 +172,13 @@
                Source="/Kaarten/LegeKaart/EmptyCard.svg.png"
                Grid.Row="4"
                Grid.Column="1"
-                              Margin="0,0,0,30"
+               Margin="0,0,0,40"
                />
         <Image Name="ImageKaartBank"
                Source="/Kaarten/LegeKaart/EmptyCard.svg.png"
                Grid.Row="4"
                Grid.Column="4"
-               Margin="0,0,0,30"
+               Margin="0,0,0,40"
                />
         <Viewbox
             Grid.Row="3"
