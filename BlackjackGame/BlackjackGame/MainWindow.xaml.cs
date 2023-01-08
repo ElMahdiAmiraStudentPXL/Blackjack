@@ -124,9 +124,9 @@ namespace BlackjackGame
         /// Hier wordt de kaart die gegeven werd afgeprint op de TextBox
         /// en een Image wordt getoond van de kaart.
         /// </summary>
-        private void PrintKaart(bool isSpeler)
+        private void PrintKaart(bool isSpeler, bool isDoubleDown)
         {
-            if (isSpeler == true)
+            if (isSpeler == true && isDoubleDown == false)
             {
                 TxtKaartSpeler.Text += kaartEnScoreSpeler[0] + "\n";
                 imageKaart = new BitmapImage();
@@ -135,6 +135,16 @@ namespace BlackjackGame
                 imageKaart.EndInit();
                 ImageKaartSpeler.Source = imageKaart;
 
+            }
+            else if (isSpeler == true)
+            {
+                TxtKaartSpeler.Text += kaartEnScoreSpeler[0] + "\n";
+                imageKaart = new BitmapImage();
+                imageKaart.BeginInit();
+                imageKaart.UriSource = new Uri(kaartEnScoreSpeler[2], UriKind.Relative);
+                imageKaart.Rotation = Rotation.Rotate90;
+                imageKaart.EndInit();
+                ImageKaartSpeler.Source = imageKaart;
             }
 
             else
@@ -220,7 +230,7 @@ namespace BlackjackGame
                         {
                             await Task.Delay(1000);
                             ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
-                            PrintKaart(true);
+                            PrintKaart(true, false);
                         }
 
 
@@ -230,7 +240,7 @@ namespace BlackjackGame
                     {
                         await Task.Delay(1000);
                         ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, false);
-                        PrintKaart(false);
+                        PrintKaart(false, false);
                     }
                     BtnStand.IsEnabled = true;
                     BtnDoubleDown.IsEnabled = true;
@@ -413,7 +423,7 @@ namespace BlackjackGame
             if (kaartEnScoreSpeler != null)
             {
                 await Task.Delay(1000);
-                PrintKaart(true);
+                PrintKaart(true, false);
                 ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
                 if (scoreSpelerBerekend >= 21)
                 {
@@ -488,7 +498,7 @@ namespace BlackjackGame
                 if (kaartEnScoreBank != null)
                 {
                     await Task.Delay(1000);
-                    PrintKaart(false);
+                    PrintKaart(false, false);
                     ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, false);
                 }
 
@@ -651,7 +661,7 @@ namespace BlackjackGame
                 {
                     TxtKapitaal.Text = Convert.ToString(Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) / 2));
                     await Task.Delay(1000);
-                    PrintKaart(true);
+                    PrintKaart(true, true);
                     ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
                     BtnStand_Click(sender, e);
                 }
