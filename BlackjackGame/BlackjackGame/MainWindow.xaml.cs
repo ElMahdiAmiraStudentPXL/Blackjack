@@ -439,7 +439,6 @@ namespace BlackjackGame
         private async void BtnHit_Click(object sender, RoutedEventArgs e)
         {
             GeefKaart(true);
-            ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
             if (scoreSpelerBerekend >= 21)
             {
                 BtnHit.IsEnabled = false;
@@ -447,6 +446,7 @@ namespace BlackjackGame
             }
             await Task.Delay(1000);
             PrintKaart(true, false);
+            ScoreGeven(kaartEnScoreSpeler, kaartEnScoreBank, true);
 
 
         }
