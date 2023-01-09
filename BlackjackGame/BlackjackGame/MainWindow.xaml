@@ -223,7 +223,7 @@
             </StatusBar>
         </DockPanel>
         
-        <Image Source="/Kaarten/StapelKaarten/Stapelkaarten.png"
+        <Image Margin="0,5,0,0" Source="/Kaarten/StapelKaarten/Stapelkaarten.png"
                Grid.Row="2"
                Grid.Column="4"
                Grid.ColumnSpan="2"

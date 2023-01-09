@@ -185,6 +185,7 @@ namespace BlackjackGame
                     else
                     {
                         MessageBox.Show("Kapitaal is op, een andere keer beter.");
+                        SliderAmount.IsEnabled = true;
                         BtnDeel.IsEnabled = false;
                         TxtInzet.IsReadOnly = false;
                         return false;
@@ -195,6 +196,7 @@ namespace BlackjackGame
                     MessageBox.Show("Inzet moet minstens 10% van de kapitaal zijn.", "Te lage inzet", MessageBoxButton.OK, MessageBoxImage.Error);
                     BtnDeel.IsEnabled = true;
                     TxtInzet.IsReadOnly = false;
+                    SliderAmount.IsEnabled = true;
                     return false;
                 }
             }
@@ -227,7 +229,7 @@ namespace BlackjackGame
             TxtScoreBank.Text = "0";
             TxtStatus.Text = "";
             BtnDeel.IsEnabled = false;
-            TxtInzet.IsReadOnly = false;
+            TxtInzet.IsReadOnly = true;
             if (TxtKapitaal.Text != "")
             {
                 if (MinInzetIs10PcOfKapitaalOp() == true)
@@ -263,6 +265,8 @@ namespace BlackjackGame
             {
                 MessageBox.Show("Druk eerst op de knop 'Nieuw Spel' om het spel te spelen.", "Nieuw Spel", MessageBoxButton.OK, MessageBoxImage.Error);
                 BtnNieuwSpel.IsEnabled = true;
+                TxtInzet.IsReadOnly = false;
+                SliderAmount.IsEnabled = true;
             }
         }
         /// <summary>
@@ -339,10 +343,15 @@ namespace BlackjackGame
                                 "/Kaarten/Ruiten/QD.svg.png", "/Kaarten/Ruiten/KD.svg.png",
                                 "/Kaarten/Ruiten/JD.svg.png", "/Kaarten/Ruiten/AD.svg.png"
                         };
-                }
-                else
-                {
-                    MessageBox.Show("Inzet is geen numerieke waarde.", "Inzet fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                    TxtHoeveelheidKaarten.Content = Convert.ToString(soortKaarten.Count);
+                    if (isSpeler == true)
+                    {
+                        GeefKaart(true);
+                    }
+                    else
+                    {
+                        GeefKaart(false);
+                    }
                 }
             }
 
@@ -359,7 +368,6 @@ namespace BlackjackGame
                     if (kaartEnScoreSpeler[1] != "11")
                     {
                         scoreSpelerOnberekend += Convert.ToInt32(kaartEnScoreSpeler[1]);
-                        scoreSpelerBerekend += Convert.ToInt32(kaartEnScoreSpeler[1]);
                         if (aasCounterSpeler >= 1 && scoreSpelerOnberekend + Convert.ToInt32(kaartEnScoreSpeler[1]) > 21)
                         {
                             scoreSpelerBerekend = scoreSpelerOnberekend - aasCounterSpeler * 10;
@@ -367,13 +375,14 @@ namespace BlackjackGame
                         }
                         else
                         {
+                            scoreSpelerBerekend += Convert.ToInt32(kaartEnScoreSpeler[1]);
                             TxtScoreSpeler.Text = Convert.ToString(scoreSpelerBerekend);
                         }
                     }
                     else
                     {
                         aasCounterSpeler++;
-                        if (scoreSpelerOnberekend + Convert.ToInt32(kaartEnScoreSpeler[1]) < 21)
+                        if (scoreSpelerOnberekend + Convert.ToInt32(kaartEnScoreSpeler[1]) <= 21)
                         {
                             scoreSpelerOnberekend += Convert.ToInt32(kaartEnScoreSpeler[1]);
                             scoreSpelerBerekend += Convert.ToInt32(kaartEnScoreSpeler[1]);
@@ -382,7 +391,7 @@ namespace BlackjackGame
                         else
                         {
                             scoreSpelerOnberekend += Convert.ToInt32(kaartEnScoreSpeler[1]);
-                            scoreSpelerBerekend = scoreSpelerOnberekend - aasCounterSpeler * 10;
+                            scoreSpelerBerekend += scoreSpelerOnberekend - aasCounterSpeler * 10;
                             TxtScoreSpeler.Text = Convert.ToString(scoreSpelerBerekend);
                         }
                     }
@@ -392,7 +401,6 @@ namespace BlackjackGame
                     if (kaartEnScoreBank[1] != "11")
                     {
                         scoreBankOnberekend += Convert.ToInt32(kaartEnScoreBank[1]);
-                        scoreBankBerekend += Convert.ToInt32(kaartEnScoreBank[1]);
                         if (aasCounterBank >= 1 && scoreBankOnberekend + Convert.ToInt32(kaartEnScoreBank[1]) > 21)
                         {
                             scoreBankBerekend = scoreBankOnberekend - aasCounterBank * 10;
@@ -400,6 +408,7 @@ namespace BlackjackGame
                         }
                         else
                         {
+                            scoreBankBerekend += Convert.ToInt32(kaartEnScoreBank[1]);
                             TxtScoreBank.Text = Convert.ToString(scoreBankBerekend);
                         }
 
@@ -407,7 +416,7 @@ namespace BlackjackGame
                     else
                     {
                         aasCounterBank++;
-                        if (scoreBankOnberekend + Convert.ToInt32(kaartEnScoreBank[1]) < 21)
+                        if (scoreBankOnberekend + Convert.ToInt32(kaartEnScoreBank[1]) <= 21)
                         {
                             scoreBankOnberekend += Convert.ToInt32(kaartEnScoreBank[1]);
                             scoreBankBerekend += Convert.ToInt32(kaartEnScoreBank[1]);
@@ -594,6 +603,7 @@ namespace BlackjackGame
             imageKaart.EndInit();
             ImageKaartBank.Source = imageKaart;
             TxtInzet.IsReadOnly = false;
+            SliderAmount.IsEnabled = true;
             TxtKapitaal.Text = "100";
             Historiek = "";
             RondeCounter = 0;
