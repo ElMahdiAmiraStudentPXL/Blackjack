@@ -169,18 +169,25 @@ namespace BlackjackGame
             {
                 if (Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) >= Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text) * 0.1))
                 {
-                    if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) < 0)
+                    if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text)) < 0 && Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) != 0)
                     {
-
-                        MessageBox.Show("Jammer, geld is op. Een andere keer beter.");
-                        BtnNieuwSpel.IsEnabled = true;
-                        BtnDeel.IsEnabled = false;
+                        MessageBox.Show("U kunt geen inzet geven hoger dan de kapitaal", "Te hoge inzet", MessageBoxButton.OK, MessageBoxImage.Error);
+                        SliderAmount.IsEnabled = true;
+                        BtnDeel.IsEnabled = true;
+                        TxtInzet.IsReadOnly = false;
                         return false;
                     }
-                    else
+                    else if (Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) > 0)
                     {
                         TxtKapitaal.Text = Convert.ToString(Math.Ceiling(Convert.ToDouble(TxtKapitaal.Text)) - Math.Ceiling(Convert.ToDouble(TxtInzet.Text)));
                         return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Kapitaal is op, een andere keer beter.");
+                        BtnDeel.IsEnabled = false;
+                        TxtInzet.IsReadOnly = false;
+                        return false;
                     }
                 }
                 else
@@ -196,6 +203,7 @@ namespace BlackjackGame
                 MessageBox.Show("Inzet is geen numerieke waarde of 0.", "Inzet fout", MessageBoxButton.OK, MessageBoxImage.Error);
                 BtnDeel.IsEnabled= true;
                 TxtInzet.IsReadOnly = false;
+                SliderAmount.IsEnabled= true;
                 return false;
             }
         }
@@ -219,8 +227,7 @@ namespace BlackjackGame
             TxtScoreBank.Text = "0";
             TxtStatus.Text = "";
             BtnDeel.IsEnabled = false;
-            TxtInzet.IsReadOnly = true;
-            BtnNieuwSpel.IsEnabled = false;
+            TxtInzet.IsReadOnly = false;
             if (TxtKapitaal.Text != "")
             {
                 if (MinInzetIs10PcOfKapitaalOp() == true)
@@ -491,6 +498,7 @@ namespace BlackjackGame
         {
             BtnHit.IsEnabled = false;
             BtnStand.IsEnabled = false;
+            BtnDoubleDown.IsEnabled = false;
             while (!(scoreBankBerekend > 16))
             {
                 GeefKaart(false);
@@ -551,8 +559,7 @@ namespace BlackjackGame
             }
             BtnDeel.IsEnabled = true;
             TxtInzet.IsReadOnly = false;
-            SliderAmount.IsEnabled = false;
-            BtnDoubleDown.IsEnabled = false;
+            SliderAmount.IsEnabled = true;
             HistoriekBijhouden();
         }
 
@@ -636,6 +643,8 @@ namespace BlackjackGame
                                 "/Kaarten/Ruiten/QD.svg.png", "/Kaarten/Ruiten/KD.svg.png",
                                 "/Kaarten/Ruiten/JD.svg.png", "/Kaarten/Ruiten/AD.svg.png"
                         };
+
+            TxtHoeveelheidKaarten.Content = Convert.ToString(imageKaarten.Count);
 
         }
 

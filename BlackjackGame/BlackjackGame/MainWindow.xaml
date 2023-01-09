@@ -222,20 +222,30 @@
                 </StatusBarItem>
             </StatusBar>
         </DockPanel>
+        
+        <Image Source="/Kaarten/StapelKaarten/Stapelkaarten.png"
+               Grid.Row="2"
+               Grid.Column="4"
+               Grid.ColumnSpan="2"
+               >
+
+        </Image>
         <Label
+            HorizontalContentAlignment="Center"
             Grid.Row="2"
             Grid.Column="4"
             Grid.ColumnSpan="2"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Content="Hoeveelheid kaarten"
             FontSize="15">
-            
+
         </Label>
         <Label 
                Name="TxtHoeveelheidKaarten"
                Grid.Row="2"
                Grid.Column="4"
+               Grid.ColumnSpan="2"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                FontSize="50"
